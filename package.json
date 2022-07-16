@@ -7,6 +7,8 @@
     "build": "cross-env NODE_ENV=production vite build"
   },
   "dependencies": {
+    "@heroicons/vue": "^1.0.6",
+    "jose": "^4.8.3",
     "vue": "^3.2.37",
     "vue-router": "^4.1.1"
   },
