@@ -2,9 +2,10 @@
 import * as jose from 'jose'
 import {useRoute} from 'vue-router'
 import {CheckCircleIcon} from '@heroicons/vue/outline';
+import {ref} from "vue";
 
 const router = useRoute()
-let isValid = true, payload, protectedHeader;
+let isValid = true, payload = {}, protectedHeader, errorMessage;
 const pubkey = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2OPGiOs3SBU/ruM4lnzd
 X7bakb0woHLBRdb/o6YCb+0m1413dWEd1TSmAJ1uD8EQqYH+4wEe1SkKVD4HIm4i
@@ -21,6 +22,7 @@ try {
 	protectedHeader = data.protectedHeader
 } catch (e) {
 	console.log(e)
+	errorMessage = e.message
 	isValid = false
 }
 </script>
@@ -31,10 +33,6 @@ try {
 		>
 			<template v-if="isValid">
 				<div class="text-3xl">✅ 驗證成功 <span class="font-bold">{{ payload.jti }}</span></div>
-			</template>
-			<template v-else>
-
-				<div class="text-3xl">❌ 驗證失敗</div>
 				<p
 					class="mt-3 text-base text-gray-500  sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0"
 				>
@@ -55,6 +53,10 @@ try {
 				>
 					{{ payload.body }}
 				</p>
+			</template>
+			<template v-else>
+				<div class="text-3xl">❌ 驗證失敗</div>
+				<div class="text-sm text-gray-400 mt-3">{{ errorMessage }}</div>
 			</template>
 		</div>
 	</main>
