@@ -1,8 +1,6 @@
 <script setup>
 import * as jose from 'jose'
 import {useRoute} from 'vue-router'
-import {CheckCircleIcon} from '@heroicons/vue/outline';
-import {ref} from "vue";
 
 const router = useRoute()
 let isValid = true, payload = {}, protectedHeader, errorMessage;
@@ -17,7 +15,7 @@ TwIDAQAB
 -----END PUBLIC KEY-----`
 
 try {
-	const data = await jose.compactVerify(router.query.key, await jose.importSPKI(pubkey, "RS256"))
+	const data = await jose.compactVerify(router.query.crt, await jose.importSPKI(pubkey, "RS256"))
 	payload = JSON.parse(new TextDecoder().decode(data.payload))
 	protectedHeader = data.protectedHeader
 } catch (e) {
