@@ -15,8 +15,8 @@ const onDecode = (text) => {
                 "1": "獎狀"
             }
             alert("您掃描的證書類型為：" + lang_type[type]);
-            const code_letter = String.fromCharCode(String(text.slice(1, 4))) + String(text.slice(4, 7));
-            const code_number = text.slice(7, 13);
+            const code_letter = String.fromCharCode(String(text.slice(1, 4))) + String.fromCharCode(String(text.slice(4, 7)));
+            const code_number = text.slice(7, 12);
             alert("您掃描的證書號為：" + code_letter + code_number);
         }
     }
