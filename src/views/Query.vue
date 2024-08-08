@@ -1,7 +1,8 @@
 <script setup>
 import * as jose from 'jose'
 import {useRoute} from 'vue-router'
-import {ref} from "vue";
+import {reactive, ref} from "vue";
+import {VuePdf} from "vue3-pdfjs";
 
 const router = useRoute()
 let loading = ref(true)
@@ -31,6 +32,7 @@ if (router.query.key === undefined) {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
+                pdf_file.value = data.file
                 payload.value = {
                     jti: data.certificate_number,
                     sub: data.certificate_type,
@@ -40,6 +42,7 @@ if (router.query.key === undefined) {
                     nbf: data.not_before,
                     exp: data.expires_at,
                     owner: data.owner,
+                    file: data.file,
                     name: data.name,
                     description: data.description,
                 }
@@ -95,7 +98,9 @@ if (router.query.key === undefined) {
                     <p
                         class="mt-3 text-base text-gray-500  sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0"
                     >
-                        簽發者： <span class="font-bold">{{ payload.iss }}</span> <img v-if="payload.iss_logo" :src="payload.iss_logo" alt="Logo" class="w-8 h-8 inline-block"/>
+                        簽發者： <span class="font-bold">{{ payload.iss }}</span> <img v-if="payload.iss_logo"
+                                                                                      :src="payload.iss_logo" alt="Logo"
+                                                                                      class="w-8 h-8 inline-block"/>
                     </p>
                     <p
                         class="mt-3 text-base text-gray-500  sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0"
@@ -127,7 +132,8 @@ if (router.query.key === undefined) {
                     >
                         {{ payload.body }}
                     </p>
-                    <object v-if="payload.file" :data="payload.file" type="application/pdf" class="mt-5 w-full h-96"></object>
+                    <object v-if="payload.file" :data="payload.file" type="application/pdf"
+                            class="mt-5 w-full h-full min-h-screen"></object>
                 </template>
                 <template v-else>
                     <div class="text-3xl">❌ 驗證失敗</div>
